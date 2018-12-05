@@ -1,59 +1,90 @@
 'use strict';
 
 const express = require('express');
+const superagent = require('superagent');
+const app = express();
 const cors = require('cors');
-//const superagent = require('superagent');
+const PORT = process.env.PORT || 3000;
 
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
-const app = express();
-
 app.use(cors());
 
-//location functions
+
+
 app.get('/location', (request, response) => {
-  console.log('my request object:', request.body);
-  const locData = searchToLatLong(request.query.data);
-  response.send(locData);
+  searchToLatLong(request.query.data)
+    .then(location => response.send(location))
+    .catch(error => handleError (error, response));
 });
+
+
+app.get('/weather', getWeatherData);
+
+
+function Location(query, res) {
+  this.formatted_query = res.body.results[0].formatted_address;
+  this.latitude = res.body.results[0].geometry.location.lat;
+  this.longitude = res.body.results[0].geometry.location.lng;
+  this.search_query = query;
+};
+
+
+function Weather(day) {
+  this.forcast = day.summary;
+  this.time = new Date(day.time * 1000).toDateString();
+};
+
 
 function searchToLatLong(query) {
-  const geoData = require('./data/location.json');
-  const location = new Location(geoData.results[0]);
-  location.search_query = query;
-  return location;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.GEOCODE_API_KEY}`;
+  return superagent.get(url)
+    .then(res => {
+      return new Location(query, res);
+    })
+    .catch(error => handleError (error));
 }
 
-function Location(data) {
-this.formatted_query = data.formatted_address;
-this.latitude = data.geometry.location.lat;
-this.longitude = data.geometry.location.lng;
+
+function getWeatherData(request, response) {
+  const url = `https://api.darksky.net/forecast/${process.env.WEATHER_API_KEY}/${request.query.data.latitude},${request.query.data.longitude}`;
+  superagent.get(url)
+    .then(result => {
+      const weatherSum = result.body.daily.data.map(day => {
+        return new Weather(day);
+      });
+      response.send(weatherSum);
+    })
+    .catch(error => handleError (error));
+}
+//yelp
+
+app.get('/yelp', getYelpData);
+
+function Yelp(businesses) {
+  this.name = businesses.name;
+  this.rating = businesses.rating;
+  this.price = businesses.price;
+  this.url = businesses.url;
+  this.image_url = businesses.image_url;
 };
 
-//Weather functions
-app.get('/weather', (request, response) => {
-  console.log('my request object:', request.body);
-  const weaData = getWeatherData(request.query.data);
-  response.send(weaData);
-});
-
-function Weather(data) {
-  this.time = data.time;
-  this.forcast = data.summary;
+function getYelpData(request, response) {
+  const url = `https://api.yelp.com/v3/businesses/search?location=${request.query.data.latitude},${request.query.data.longitude}`;
+  superagent.get(url)
+    .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`)
+    .then(result => {
+      const yelpSum = result.body.businesses.map(businesses => {
+        return new Yelp(businesses);
+      });
+      response.send(yelpSum);
+    })
+    .catch(error => handleError (error));
 };
 
-function getWeatherData(query) {
-  const weatherData = require('./data/weather.json');
-  const weather = new Weather(weatherData.daily);
-  weather.search_query = query;
-  return weather;
-};
-
-
-function handleError(err, res) {
+function handleError(error, response) {
   console.log(error);
-  if (res) res.status(500).send('something broke');
+  if (response) response.status(500).send('something broke');
 }
 
 app.listen(PORT, () => {

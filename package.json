@@ -1,5 +1,5 @@
 {
-  "name": "Lab-06",
+  "name": "Lab-07",
   "version": "1.0.0",
   "description": "## Overview",
   "main": "server.js",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/omence/Lab-06.git"
+    "url": "git+https://github.com/omence/Lab-07.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/omence/Lab-06/issues"
+    "url": "https://github.com/omence/Lab-07/issues"
   },
-  "homepage": "https://github.com/omence/Lab-06#readme",
+  "homepage": "https://github.com/omence/Lab-07#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^6.1.0",
