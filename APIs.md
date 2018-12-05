@@ -1,0 +1,11 @@
+google AIzaSyDPjLSRLJpOj8AJ9ufeAzp4JDpU0_3QrqE
+
+dark skies a71f4a4b4e63ee310b6f73e1533f4fce
+
+yelp Sn8tF_ZCqM8-rkEymxwI-xHgAllYLNe7BkgHdm4qt32FZhn9bDsaW1mheGj-_p3lDuOCHKTdwaeIgHqSsHhE-KJQV9nm7CoYUtPrQ7fwksyjjpPFZAhzjDExMf0HXHYx
+yelp client ID RIZe3gi79Ko28xgG3dyzNQ
+
+movies 61c9ad78745d9e1c02537b50cc8c0a20
+API Read Access Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2MWM5YWQ3ODc0NWQ5ZTFjMDI1MzdiNTBjYzhjMGEyMCIsInN1YiI6IjVjMDdmZTA4MGUwYTI2MzNhNjEwYzBhMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.aPJ9JWfxx090QcrzJBNHjlpFnqlhX0-PdKrSiXGS-cA
+
+example https://api.themoviedb.org/3/movie/550?api_key=
