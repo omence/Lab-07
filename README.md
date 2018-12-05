@@ -1,18 +1,11 @@
-# Class 06: Node, npm, Express, and APIs
+# Class 07: APIs (continued)
 
 ## Overview
 
-Today we will take a step into the back end, beginning to write a proper `server.js` file to serve API data to the City Explorer client application. You will continue to build out this file through lab 9, working with a new partner each day.
-
-Another component of this portion of the course involves working with a static client which you have no control over. You will be able to view the source code for this client, but will not be permitted to modify it in anyway. Servers and clients are separate entities; the only relationships that exist between them are the relationships we create. This week, you will be creating those relationships.
+Today we will continue to work with third-party APIs to request data. Part of being a software developer involves continuous improvement and refactoring of the code base. We will discuss how and when to refactor our code today.
 
 ## Learning Objectives
 
-As a result of completing Lecture 6 of Code 301, students will:
-- Begin to understand how the world wide web works
-- Be able to explain the role of the browser and the server as components of the web request-response cycle
-- Understand how to initialize a NodeJS project and use NPM packages
-- Understand the basics of working with ExpressJS 
-- Understand how to request data from a third-party API, both within an API development environment and using an API to proxy requests
-- Control their production and deployment environments
-- Understand how to interact with a static client code base
+As a result of completing Lecture 7 of Code 301, students will:
+- Understand how and when to refactor their existing code base
+- Use existing data as part of the request to other third-party APIs
