@@ -31,7 +31,7 @@ function Location(query, res) {
 
 
 function Weather(day) {
-  this.forcast = day.summary;
+  this.forecast = day.summary;
   this.time = new Date(day.time * 1000).toDateString();
 };
 
@@ -81,7 +81,29 @@ function getYelpData(request, response) {
     })
     .catch(error => handleError (error));
 };
+ //movies
 
+app.get('/movies', getMovieData);
+
+function Movie(data) {
+  this.title = data.title;
+  //this.avarage_votes = avarage_votes;
+  this.popularity = data.popularity;
+  this.released_on = data.released_on;
+  this.image_url = 'https://image.tmdb.org/t/p/w370_and_h556_bestv2/' + data.poster_path;
+};
+
+function getMovieData(request, response) {
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${request.query.data.search_query}`;
+  superagent.get(url)
+    .then(result => {
+      const movieSum = result.body.results.map(data => {
+        return new Movie(data);
+      });
+      response.send(movieSum);
+    })
+    .catch(error => handleError (error));
+};
 function handleError(error, response) {
   console.log(error);
   if (response) response.status(500).send('something broke');
