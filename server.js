@@ -67,7 +67,7 @@ function Yelp(businesses) {
   this.price = businesses.price;
   this.url = businesses.url;
   this.image_url = businesses.image_url;
-};
+}
 
 function getYelpData(request, response) {
   const url = `https://api.yelp.com/v3/businesses/search?location=${request.query.data.latitude},${request.query.data.longitude}`;
@@ -80,7 +80,7 @@ function getYelpData(request, response) {
       response.send(yelpSum);
     })
     .catch(error => handleError (error));
-};
+}
  //movies
 
 app.get('/movies', getMovieData);
@@ -91,7 +91,7 @@ function Movie(data) {
   this.popularity = data.popularity;
   this.released_on = data.released_on;
   this.image_url = 'https://image.tmdb.org/t/p/w370_and_h556_bestv2/' + data.poster_path;
-};
+}
 
 function getMovieData(request, response) {
   const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${request.query.data.search_query}`;
@@ -103,7 +103,7 @@ function getMovieData(request, response) {
       response.send(movieSum);
     })
     .catch(error => handleError (error));
-};
+}
 function handleError(error, response) {
   console.log(error);
   if (response) response.status(500).send('something broke');
