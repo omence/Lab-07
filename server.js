@@ -234,14 +234,14 @@ function getMovie(request, response) {
 }
 
 Movie.prototype.save = function(id) {
-  const SQL = `INSERT INTO movies (title,popularity,release_on,image_url) VALUES ($1,$2,$3,$4);`;
+  const SQL = `INSERT INTO moviesdbs (title,popularity,release_on,image_url) VALUES ($1,$2,$3,$4);`;
   const values = Object.values(this);
   values.push(id);
   client.query(SQL, values);
 };
 
 Movie.lookup = function(handler) {
-  const SQL = `SELECT * FROM yelps WHERE title=$1`;
+  const SQL = `SELECT * FROM moviesdbs WHERE title=$1`;
   client.query(SQL, [handler.location.id])
     .then(result => {
       if (result.rowCount > 0) {
@@ -255,7 +255,7 @@ Movie.lookup = function(handler) {
 };
 
 Movie.fetch = function(location) {
-  const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${request.query.data.search_query}`;
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${location.search_query}`;
 
   return superagent.get(url)
     .then(result => {
@@ -267,26 +267,7 @@ Movie.fetch = function(location) {
       return movieSum;
     });
 };
-// //helper
-// function getMovieData(request, response) {
-//   const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${request.query.data.search_query}`;
-//   superagent.get(url)
-//     .then(result => {
-//       const movieSum = result.body.results.map(data => {
-//         return new Movie(data);
-//       });
-//       response.send(movieSum);
-//     })
-//     .catch(error => handleError (error));
-// };
 
-//error function
-// function handleError(error, response) {
-//   console.log(error);
-//   if (response) response.status(500).send('something broke');
-// }
-
-//database functions
 
 app.listen(PORT, () => {
   console.log(`listening on ${PORT}`);
