@@ -1,5 +1,8 @@
-DROP TABLE IF EXISTS weathers;
 DROP TABLE IF EXISTS locations;
+DROP TABLE IF EXISTS weathers;
+DROP TABLE IF EXISTS yelps;
+DROP TABLE IF EXISTS moviesdbs;
+DROP TABLE IF EXISTS meetups;
 
 CREATE TABLE locations (
   id SERIAL PRIMARY KEY,
@@ -13,6 +16,7 @@ CREATE TABLE weathers (
   id SERIAL PRIMARY KEY,
   forecast VARCHAR(255),
   time VARCHAR(255),
+  created_at BIGINT,
   location_id INTEGER NOT NULL,
   FOREIGN KEY (location_id) REFERENCES locations (id)
 );
@@ -24,6 +28,7 @@ CREATE TABLE yelps (
   price VARCHAR(255),
   url VARCHAR(255),
   image_url VARCHAR(255),
+  created_at BIGINT,
   location_id INTEGER NOT NULL,
   FOREIGN KEY (location_id) REFERENCES locations (id)
 );
@@ -34,6 +39,18 @@ CREATE TABLE moviesdbs (
   popularity VARCHAR(255),
   released_on VARCHAR(255),
   image_url VARCHAR(255),
+  created_at BIGINT,
+  location_id INTEGER NOT NULL,
+  FOREIGN KEY (location_id) REFERENCES locations (id)
+);
+
+CREATE TABLE meetups (
+  id SERIAL PRIMARY KEY,
+  link VARCHAR(255),
+  name VARCHAR(255),
+  creation_date VARCHAR(255),
+  host VARCHAR(255),
+  created_at BIGINT,
   location_id INTEGER NOT NULL,
   FOREIGN KEY (location_id) REFERENCES locations (id)
 );
