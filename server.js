@@ -14,6 +14,11 @@ client.on('error', error => console.log(error));
 
 app.use(cors());
 
+function deleteTable(table, city) {
+  const SQL = `DELETE from ${table} WHERE location_id=${city};`;
+  return client.query(SQL);
+}
+
 //location functions
 app.get('/location', getLocation);
 //pull from cache or make request
@@ -107,24 +112,28 @@ function getWeather(request, response) {
 function Weather(day) {
   this.forecast = day.summary;
   this.time = new Date(day.time * 1000).toDateString();
+  this.created_at = Date.now();
 }
 
 // //weather save
 Weather.prototype.save = function(id) {
-  const SQL = `INSERT INTO weathers (forecast, time, location_id) VALUES ($1, $2, $3);`;
+  const SQL = `INSERT INTO weathers (forecast, time, location_id,created_at) VALUES ($1,$2,$3,$4);`;
   const values = Object.values(this);
   values.push(id);
   client.query(SQL, values);
 };
 // //look up weather in DB
 Weather.lookup = function(handler) {
+  const ageData = `SELECT * FROM weathers WHERE created_at=$4`;
   const SQL = `SELECT * FROM weathers WHERE location_id=$1`;
   client.query(SQL, [handler.location.id])
     .then(result => {
-      if (result.rowCount > 0) {
+      let ageOfData = (Date.now() - ageData) / (1000 * 60);
+      if (result.rowCount > 0 && ageOfData < 30) {
         console.log('got data from SQL');
         handler.cacheHit(result);
       } else {
+        deleteTable('weathers', SQL);
         console.log('got data from api');
         handler.cacheMiss();
       }
@@ -155,6 +164,7 @@ function Yelp(businesses) {
   this.price = businesses.price;
   this.url = businesses.url;
   this.image_url = businesses.image_url;
+  this.time = new Date(businesses.time * 1000).toDateString();
 };
 
 function getYelp(request, response) {
@@ -217,6 +227,7 @@ function Movie(data) {
   this.popularity = data.popularity;
   this.released_on = data.released_on;
   this.image_url = 'https://image.tmdb.org/t/p/w370_and_h556_bestv2/' + data.poster_path;
+  this.time = new Date(data.time * 1000).toDateString();
 };
 function getMovie(request, response) {
   const hanlder = {
